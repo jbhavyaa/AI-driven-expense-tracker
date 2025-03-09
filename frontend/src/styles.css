@@ -1,0 +1,784 @@
+/* General Styling */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Register & Login Form Styling */
+.container {
+  max-width: 350px;
+  margin: auto;
+  padding: 20px 40px 20px 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px; 
+  margin: 10px 10px 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+.link {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link:hover {
+  color: #0056b3;
+}
+/* ---------- MONTHLY INCOME PAGE ---------- */
+.income-container {
+  width: 320px;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: 0.3s;
+}
+
+.income-container:hover {
+  transform: scale(1.02);
+}
+
+/* Header */
+.title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Form Group */
+.form-group {
+  margin-top: 15px;
+  text-align: left;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Inputs & Dropdowns */
+.dropdown,
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.3s;
+}
+
+.dropdown:focus,
+.input-field:focus {
+  border-color: #667eea;
+  outline: none;
+}
+
+/* Buttons */
+.add-btn,
+.back-btn,
+.save-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+  margin-top: 10px;
+}
+
+.add-btn:hover,
+.back-btn:hover,
+.save-btn:hover {
+  background: #5a67d8;
+  transform: scale(1.05);
+}
+
+/* Total Income */
+.total-income {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 8px;
+  margin-top: 15px;
+  text-align: center;
+}
+
+/* Income Table */
+.income-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.income-table th,
+.income-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.income-table th {
+  background: #667eea;
+  color: white;
+  font-weight: bold;
+}
+
+/* Buttons Container */
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.back-btn,
+.save-btn {
+  width: 48%;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .income-container {
+    width: 90%;
+    padding: 20px;
+  }
+}
+
+/* Container */
+/* Container */
+.container {
+  width: 350px;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Hover Effect */
+.container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Title */
+h2 {
+  font-size: 22px;
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+/* Input Group (Ensuring Fields Appear One Below the Other) */
+.input-group {
+  display: flex;
+  flex-direction: column;  /* Makes each element stack vertically */
+  gap: 10px;  /* Adds space between elements */
+  width: 100%;
+}
+
+/* Input Fields */
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.3s;
+  background: #f8f8f8;
+  display: block;
+}
+
+.input-group input:focus {
+  border-color: #667eea;
+  outline: none;
+  background: #fff;
+}
+
+/* Button */
+.input-group button {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.input-group button:hover {
+  background: #5a67d8;
+  transform: scale(1.05);
+}
+
+/* Goal List */
+.goal-list {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+/* Individual Goal Item */
+.goal-item {
+  background: #f8f8f8;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: left;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.goal-item h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.goal-item p {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+/* Progress Bar */
+progress {
+  width: 100%;
+  height: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #ddd;
+  display: block;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #ddd;
+}
+
+progress::-webkit-progress-value {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .container {
+    width: 90%;
+    padding: 20px;
+  }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-group input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+button {
+  background-color: #6a5acd;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #483d8b;
+}
+
+.budget-list {
+  margin-top: 15px;
+}
+
+.budget-item {
+  background: #f3f3f3;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 6px;
+}
+
+.dashboard-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  gap: 20px; /* Space between grid items */
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.dashboard-box {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.dashboard-box:hover {
+  transform: scale(1.05);
+}
+
+.dashboard-img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
+}
+
+/* ---------- CURRENT SAVINGS PAGE ---------- */
+.savings-container {
+  width: 320px;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: 0.3s;
+}
+
+.savings-container:hover {
+  transform: scale(1.02);
+}
+
+/* Header */
+.title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Form Group */
+.label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Inputs */
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.3s;
+}
+
+.input-field:focus {
+  border-color: #667eea;
+  outline: none;
+}
+
+/* Buttons */
+.back-btn,
+.save-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+  margin-top: 10px;
+}
+
+.back-btn:hover,
+.save-btn:hover {
+  background: #5a67d8;
+  transform: scale(1.05);
+}
+
+/* Total Savings */
+.total-savings {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 8px;
+  margin-top: 15px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .savings-container {
+    width: 90%;
+    padding: 20px;
+  }
+}
+
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #2c3e50;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 20px;
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 15px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 18px;
+}
+
+.sidebar ul li:hover {
+  background-color: #34495e;
+}
+.app-container {
+  display: flex;
+}
+
+.content-with-sidebar {
+  margin-left: 260px; /* Offset for sidebar */
+  padding: 20px;
+  width: 100%;
+}
+
+.content-full {
+  width: 100%;
+  padding: 20px;
+}
+
+/* ---------- USER PROFILE PAGE ---------- */
+.profile-container {
+  width: 320px;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: 0.3s;
+  margin: auto;
+}
+
+.profile-container:hover {
+  transform: scale(1.02);
+}
+
+/* Header */
+.profile-container h2 {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+}
+
+/* Form Group */
+.profile-container .form-group {
+  margin-top: 15px;
+  text-align: left;
+}
+
+/* Labels */
+.profile-container label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Input Fields */
+.profile-container .input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.3s;
+}
+
+.profile-container .input-field:focus {
+  border-color: #667eea;
+  outline: none;
+}
+
+/* Save Button */
+.profile-container .save-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+  margin-top: 10px;
+}
+
+.profile-container .save-btn:hover {
+  background: #5a67d8;
+  transform: scale(1.05);
+}
+/* ---------- BUDGET PLAN PAGE ---------- */
+.budget-plan-container {
+  width: 320px;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: 0.3s;
+  margin: auto;
+}
+
+.budget-plan-container:hover {
+  transform: scale(1.02);
+}
+
+/* Header */
+.budget-plan-container .title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+}
+
+/* Form Group */
+.budget-plan-container .form-group {
+  margin-top: 15px;
+  text-align: left;
+}
+
+/* Labels */
+.budget-plan-container .label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Input Fields */
+.budget-plan-container .input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.3s;
+}
+
+.budget-plan-container .input-field:focus {
+  border-color: #667eea;
+  outline: none;
+}
+
+/* Save Button */
+.budget-plan-container .save-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+  margin-top: 10px;
+}
+
+.budget-plan-container .save-btn:hover {
+  background: #5a67d8;
+  transform: scale(1.05);
+}
+
+/* ---------- PERSONALIZED FINANCIAL ADVICE PAGE ---------- */
+.advice-container {
+  width: 320px;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+  text-align: center;
+  transition: 0.3s;
+  margin: auto;
+}
+
+.advice-container:hover {
+  transform: scale(1.02);
+}
+
+.advice-container .title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+}
+
+/* Chat Container */
+.chat-container {
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+}
+
+.chat-messages {
+  height: 200px;
+  overflow-y: auto;
+  text-align: left;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f9f9f9;
+  margin-bottom: 10px;
+}
+
+.chat-message {
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.chat-message.bot {
+  background: #e2e8f0;
+}
+
+.chat-message.user {
+  background: #c6f6d5;
+  text-align: right;
+}
+
+.chat-input {
+  display: flex;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.chat-input button {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.chat-input button:hover {
+  background: #5a67d8;
+  transform: scale(1.05);
+}
+
