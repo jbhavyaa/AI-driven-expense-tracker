@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// Register.js
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
@@ -7,13 +8,16 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async () => {
-    setError(null); // Reset error state
+    setError(null);
+    setShowErrorPopup(false);
 
     if (!fullName || !email || !password) {
       setError("Please fill all fields.");
+      setShowErrorPopup(true);
       return;
     }
 
@@ -32,7 +36,7 @@ const Register = () => {
         throw new Error(data.msg || "Registration failed.");
       }
 
-      // Store JWT token (if backend provides it)
+      // Store JWT token and user data if provided
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
@@ -42,18 +46,29 @@ const Register = () => {
       setFullName("");
       setEmail("");
       setPassword("");
-
-      navigate("/dashboard"); // Redirect after successful registration
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message);
+      setShowErrorPopup(true);
     }
   };
+
+  useEffect(() => {
+    if (showErrorPopup) {
+      const timer = setTimeout(() => {
+        setShowErrorPopup(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showErrorPopup]);
 
   return (
     <div className="container">
       <h2>Register</h2>
-
-      {error && <p className="error-message">{error}</p>} {/* Display error messages */}
+      
+      {showErrorPopup && error && (
+        <div className="error-popup">{error}</div>
+      )}
 
       <input
         type="text"
