@@ -9,8 +9,8 @@ const Login = () => {
 
   const handleLogin = () => {
     if (email && password) {
-      alert("Login Successful!");
-      setEmail(""); 
+      // Directly navigate to the dashboard without showing an alert
+      setEmail("");
       setPassword("");
       navigate("/dashboard");  // Redirect after login
     } else {
@@ -36,8 +36,6 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>Login</button>
-
-      {/* Use a button with useNavigate instead of <a> */}
       <p className="link" onClick={() => navigate("/register")}>
         Don't have an account? Register
       </p>
