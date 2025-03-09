@@ -10,13 +10,14 @@ const Register = () => {
 
   const handleRegister = () => {
     if (fullName && email && password) {
-      alert("Registration Successful!");
-      setFullName(""); 
-      setEmail(""); 
+      // Reset fields and directly navigate to the dashboard
+      setFullName("");
+      setEmail("");
       setPassword("");
-      navigate("/dashboard");  // Redirect after registration
+      navigate("/dashboard");
     } else {
-      alert("Please fill all fields.");
+      // You can optionally handle missing fields without using pop-up alerts
+      console.error("Please fill all fields.");
     }
   };
 
@@ -45,8 +46,6 @@ const Register = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleRegister}>Register</button>
-      
-      {/* Use a button with useNavigate instead of <a> */}
       <p className="link" onClick={() => navigate("/")}>
         Already have an account? Login
       </p>
