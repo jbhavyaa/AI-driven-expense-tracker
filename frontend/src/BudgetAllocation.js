@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import "./styles.css"; // Ensure this CSS is applied
 
 function BudgetAllocation() {
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
   const [budgetList, setBudgetList] = useState([]);
+  const navigate = useNavigate(); // Initialize navigate
 
   const handleAddBudget = () => {
     if (category && amount > 0) {
@@ -14,6 +16,10 @@ function BudgetAllocation() {
     } else {
       alert("Please enter a valid category and amount greater than zero.");
     }
+  };
+
+  const handleBack = () => {
+    navigate(-1); // Navigate back to the previous page
   };
 
   const totalBudget = budgetList.reduce((sum, item) => sum + item.amount, 0);
@@ -37,7 +43,10 @@ function BudgetAllocation() {
           onChange={(e) => setAmount(e.target.value)}
           min="1"
         />
-        <button onClick={handleAddBudget}>Add Budget</button>
+        <div className="buttons">
+          <button className="back-btn" onClick={handleBack}>Back</button>
+          <button className="save-btn" onClick={handleAddBudget}>Add Budget</button>
+        </div>
       </div>
 
       <h3>Total Budget: ${totalBudget.toFixed(2)}</h3>

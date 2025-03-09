@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Mother Budgeting Chatbot</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #chatButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        #chatContainer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: none;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #minimizeBtn, #reloadBtn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        #chatMessages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: #007bff;
+            color: white;
+            margin-left: auto;
+        }
+
+        .bot-message {
+            background-color: #e9ecef;
+            color: black;
+            margin-right: auto;
+        }
+
+        .bot-message ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .bot-message ul li {
+            margin-bottom: 5px;
+        }
+
+        .typing-indicator {
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .typing-indicator span {
+            animation: blink 1.4s infinite;
+            opacity: 0;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        #inputGroup {
+            padding: 15px;
+            background-color: white;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        #sendBtn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .question-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .question-buttons button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .question-buttons button:hover {
+            background-color: #005bb5;
+        }
+
+        .follow-up-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .follow-up-buttons button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .follow-up-buttons button:hover {
+            background-color: #005bb5;
+        }
+    </style>
+</head>
+<body>
+    <button id="chatButton" onclick="toggleChat()">Chat</button>
+    
+    <div id="chatContainer">
+        <div class="chat-header">
+            <span>Budgeting Assistant</span>
+            <div>
+                <button id="reloadBtn" onclick="resetChat()">↻</button>
+                <button id="minimizeBtn" onclick="toggleChat()">−</button>
+            </div>
+        </div>
+        <div id="chatMessages"></div>
+        <div id="inputGroup">
+            <input type="text" id="userInput" placeholder="Type your message...">
+            <button id="sendBtn" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const OPENROUTER_API_KEY = "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";
+        const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+
+        let isFirstOpen = true;
+        let isConversationEnded = false;
+
+        function toggleChat() {
+            const container = document.getElementById('chatContainer');
+            const button = document.getElementById('chatButton');
+            container.style.display = container.style.display === 'none' ? 'flex' : 'none';
+            button.style.display = container.style.display === 'none' ? 'block' : 'none';
+
+            if (isFirstOpen && container.style.display === 'flex') {
+                showWelcomeMessage();
+                isFirstOpen = false;
+            }
+        }
+
+        function showWelcomeMessage() {
+            const chatMessages = document.getElementById('chatMessages');
+            const welcomeMessage = document.createElement('div');
+            welcomeMessage.className = 'message bot-message';
+            welcomeMessage.textContent = "Hi there! I'm your budgeting assistant. How can I help you today?";
+            chatMessages.appendChild(welcomeMessage);
+
+            const questionButtons = document.createElement('div');
+            questionButtons.className = 'question-buttons';
+            questionButtons.innerHTML = `
+                <button onclick="handleFAQ('How can I save money on groceries?')">How can I save money on groceries?</button>
+                <button onclick="handleFAQ('What are some budgeting tips for single mothers?')">What are some budgeting tips for single mothers?</button>
+                <button onclick="handleCustomQuestion('savings')">Suggestions for increasing savings</button>
+                <button onclick="handleFAQ('other')">Other</button>
+            `;
+            chatMessages.appendChild(questionButtons);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function handleCustomQuestion(questionType) {
+            if (isConversationEnded) return;
+
+            const questionButtons = document.querySelector('.question-buttons');
+            if (questionButtons) {
+                questionButtons.remove();
+            }
+
+            // Append the user's selected question to the chat
+            appendMessage("Suggestions for increasing savings", true);
+
+            let response = '';
+
+            if (questionType === 'savings') {
+                response = "Here are some suggestions for increasing your savings:\n" +
+                           "1. Create a budget and stick to it.\n" +
+                           "2. Cut down on unnecessary expenses.\n" +
+                           "3. Automate your savings by setting up a direct deposit into a savings account.\n" +
+                           "4. Look for ways to increase your income, such as a side job or freelance work.\n" +
+                           "5. Take advantage of discounts and coupons when shopping.\n" +
+                           "6. Review and reduce your monthly subscriptions.\n" +
+                           "7. Save windfalls like tax refunds or bonuses.\n" +
+                           "8. Consider refinancing loans to get lower interest rates.";
+            }
+
+            appendMessage(response, false);
+        }
+
+        function handleFAQ(question) {
+            if (isConversationEnded) return;
+
+            const questionButtons = document.querySelector('.question-buttons');
+            if (questionButtons) {
+                questionButtons.remove();
+            }
+
+            // Append the user's selected question to the chat
+            appendMessage(question, true);
+
+            if (question === 'other') {
+                appendMessage("Please type your question below.", false);
+            } else if (question === 'savings') {
+                handleCustomQuestion('savings');
+            } else {
+                // Directly append the bot's response for predefined FAQs
+                let response = '';
+                if (question === 'How can I save money on groceries?') {
+                    response = "Here are some tips to save money on groceries:\n" +
+                               "1. Plan your meals and make a shopping list.\n" +
+                               "2. Use coupons and look for sales.\n" +
+                               "3. Buy in bulk for non-perishable items.\n" +
+                               "4. Avoid shopping when you're hungry.\n" +
+                               "5. Compare prices at different stores.\n" +
+                               "6. Consider store brands instead of name brands.\n" +
+                               "7. Use cashback apps for grocery purchases.";
+                } else if (question === 'What are some budgeting tips for single mothers?') {
+                    response = "Here are some budgeting tips for single mothers:\n" +
+                               "1. Track your income and expenses.\n" +
+                               "2. Create a budget and stick to it.\n" +
+                               "3. Prioritize essential expenses.\n" +
+                               "4. Look for ways to reduce costs, such as cutting unnecessary subscriptions.\n" +
+                               "5. Build an emergency fund.\n" +
+                               "6. Take advantage of community resources and support programs.\n" +
+                               "7. Consider side gigs or part-time work to supplement income.";
+                }
+
+                appendMessage(response, false);
+            }
+        }
+
+        function appendMessage(message, isUser) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+
+            if (isUser) {
+                messageDiv.textContent = message;
+            } else {
+                const truncatedMessage = truncateTo100Words(message);
+
+                if (truncatedMessage.includes('\n') || truncatedMessage.includes('1.') || truncatedMessage.includes('-')) {
+                    const lines = truncatedMessage.split('\n').filter(line => line.trim() !== '');
+                    const ul = document.createElement('ul');
+                    lines.forEach(line => {
+                        const li = document.createElement('li');
+                        li.textContent = line.replace(/^\d+\.\s*/, '').replace(/^-\s*/, '');
+                        ul.appendChild(li);
+                    });
+                    messageDiv.appendChild(ul);
+                } else {
+                    messageDiv.textContent = truncatedMessage;
+                }
+
+                if (!message.includes("Please type your question below.") && !isConversationEnded) {
+                    const followUpDiv = document.createElement('div');
+                    followUpDiv.className = 'follow-up-buttons';
+                    followUpDiv.innerHTML = `
+                        <div style="margin-bottom: 10px;">Do you need help with anything else?</div>
+                        <button onclick="handleFollowUp('yes')">Yes</button>
+                        <button onclick="handleFollowUp('no')">No</button>
+                    `;
+                    messageDiv.appendChild(followUpDiv);
+                }
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function truncateTo100Words(text) {
+            const words = text.split(' ');
+            if (words.length > 100) {
+                return words.slice(0, 100).join(' ') + '...';
+            }
+            return text;
+        }
+
+        function showTypingIndicator() {
+            const chatMessages = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot-message';
+            typingDiv.innerHTML = 'Bot is typing<span class="typing-indicator"><span>.</span><span>.</span><span>.</span></span>';
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return typingDiv;
+        }
+
+        function hideTypingIndicator(typingDiv) {
+            typingDiv.remove();
+        }
+
+        async function sendMessage(userMessage) {
+            if (isConversationEnded) return;
+
+            if (!userMessage) {
+                userMessage = document.getElementById('userInput').value.trim();
+            }
+            
+            if (!userMessage) return;
+
+            appendMessage(userMessage, true);
+            document.getElementById('userInput').value = '';
+
+            if (userMessage.toLowerCase().includes('savings')) {
+                handleCustomQuestion('savings');
+                return;
+            }
+
+            const typingDiv = showTypingIndicator();
+
+            try {
+                const response = await fetch(OPENROUTER_API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+                        "HTTP-Referer": window.location.href,
+                        "X-Title": "Chatbot",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "model": "deepseek/deepseek-chat:free",
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": userMessage
+                            }
+                        ]
+                    })
+                });
+
+                const data = await response.json();
+                const botResponse = data.choices[0].message.content;
+
+                hideTypingIndicator(typingDiv);
+                appendMessage(botResponse, false);
+            } catch (error) {
+                console.error("Error fetching response from OpenRouter API:", error);
+                hideTypingIndicator(typingDiv);
+                appendMessage("Sorry, I encountered an error. Please try again.", false);
+            }
+        }
+
+        function handleFollowUp(response) {
+            if (isConversationEnded) return;
+
+            if (response === 'yes') {
+                const chatMessages = document.getElementById('chatMessages');
+                const questionButtons = document.createElement('div');
+                questionButtons.className = 'question-buttons';
+                questionButtons.innerHTML = `
+                    <button onclick="handleFAQ('How can I save money on groceries?')">How can I save money on groceries?</button>
+                    <button onclick="handleFAQ('What are some budgeting tips for single mothers?')">What are some budgeting tips for single mothers?</button>
+                    <button onclick="handleCustomQuestion('savings')">Suggestions for increasing savings</button>
+                    <button onclick="handleFAQ('other')">Other</button>
+                `;
+                chatMessages.appendChild(questionButtons);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } else if (response === 'no') {
+                appendMessage("Thank you for using the budgeting assistant. Have a great day!", false);
+                isConversationEnded = true;
+                disableInput();
+                removeAllButtons();
+            }
+        }
+
+        function disableInput() {
+            const userInput = document.getElementById('userInput');
+            const sendBtn = document.getElementById('sendBtn');
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+        }
+
+        function removeAllButtons() {
+            const questionButtons = document.querySelector('.question-buttons');
+            if (questionButtons) {
+                questionButtons.remove();
+            }
+
+            const followUpButtons = document.querySelectorAll('.follow-up-buttons');
+            followUpButtons.forEach(button => button.remove());
+        }
+
+        function resetChat() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = '';
+            isConversationEnded = false;
+            enableInput();
+            showWelcomeMessage();
+        }
+
+        function enableInput() {
+            const userInput = document.getElementById('userInput');
+            const sendBtn = document.getElementById('sendBtn');
+            userInput.disabled = false;
+            sendBtn.disabled = false;
+        }
+
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
