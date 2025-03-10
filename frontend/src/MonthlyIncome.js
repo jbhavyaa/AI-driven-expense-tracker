@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import React, { useState, useEffect } from "react";
 import "./styles.css";
 
 const MonthlyIncome = () => {
@@ -8,15 +7,52 @@ const MonthlyIncome = () => {
   const [amount, setAmount] = useState("");
   const [investment, setInvestment] = useState("");
   const [incomeList, setIncomeList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate(); // Initialize navigate
+  const API_URL = "http://localhost:5000/api/income";
 
-  // Function to handle adding income details
+  useEffect(() => {
+    if (!month) return;
+
+    const fetchIncome = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Unauthorized! Please login.");
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_URL}/get?month=${month}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setIncomeList(data.incomeList);
+        } else {
+          alert(data.message || "Failed to fetch income.");
+        }
+      } catch (error) {
+        console.error("Error fetching income:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchIncome();
+  }, [month]);
+
+  // ✅ Add income details locally
   const handleAddIncome = () => {
     if (!source || !amount || !investment) {
       alert("Please fill all fields");
       return;
     }
+
     const newIncome = { source, amount: parseFloat(amount), investment };
     setIncomeList([...incomeList, newIncome]);
 
@@ -26,8 +62,43 @@ const MonthlyIncome = () => {
     setInvestment("");
   };
 
-  // Calculate total income
-  const totalIncome = incomeList.reduce((sum, item) => sum + item.amount, 0);
+  // ✅ Save income to backend
+  const handleSaveIncome = async () => {
+    if (!month || incomeList.length === 0) {
+      alert("Please select a month and add income details.");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Unauthorized! Please login.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_URL}/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ month, incomeList }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("Income saved successfully!");
+      } else {
+        alert(data.message || "Failed to save income.");
+      }
+    } catch (error) {
+      console.error("Error saving income:", error);
+      alert("Server error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="income-container">
@@ -43,7 +114,10 @@ const MonthlyIncome = () => {
         <option value="May">May</option>
       </select>
 
-      <div className="total-income">Total Income for {month || "selected month"}: ${totalIncome}</div>
+      <div className="total-income">
+        Total Income for {month || "selected month"}: $
+        {incomeList.reduce((sum, item) => sum + item.amount, 0)}
+      </div>
 
       <div className="form-group">
         <label>Investments:</label>
@@ -63,8 +137,14 @@ const MonthlyIncome = () => {
         </select>
 
         <label>Amount:</label>
-        <input type="number" placeholder="Enter amount" className="input-field" value={amount} onChange={(e) => setAmount(e.target.value)} />
-        
+        <input
+          type="number"
+          placeholder="Enter amount"
+          className="input-field"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+
         <button className="add-btn" onClick={handleAddIncome}>Add</button>
       </div>
 
@@ -89,8 +169,10 @@ const MonthlyIncome = () => {
       </table>
 
       <div className="buttons">
-        <button className="back-btn" onClick={() => navigate(-1)}>Back</button> {/* Back button logic */}
-        <button className="save-btn">Save</button>
+        <button className="back-btn">Back</button>
+        <button className="save-btn" onClick={handleSaveIncome} disabled={loading}>
+          {loading ? "Saving..." : "Save"}
+        </button>
       </div>
     </div>
   );
