@@ -6,7 +6,7 @@ const MonthlyIncome = () => {
   const [source, setSource] = useState("");
   const [amount, setAmount] = useState("");
   const [investment, setInvestment] = useState("");
-  const [incomeList, setIncomeList] = useState([]);
+  const [incomeList, setIncomeList] = useState([]); // ✅ Ensure it's always an array
   const [loading, setLoading] = useState(false);
 
   const API_URL = "http://localhost:5000/api/income";
@@ -25,14 +25,12 @@ const MonthlyIncome = () => {
         setLoading(true);
         const response = await fetch(`${API_URL}/get?month=${month}`, {
           method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
+          headers: { "Authorization": `Bearer ${token}` },
         });
 
         const data = await response.json();
         if (response.ok) {
-          setIncomeList(data.incomeList);
+          setIncomeList(Array.isArray(data.incomeList) ? data.incomeList : []);
         } else {
           alert(data.message || "Failed to fetch income.");
         }
@@ -53,8 +51,8 @@ const MonthlyIncome = () => {
       return;
     }
 
-    const newIncome = { source, amount: parseFloat(amount), investment };
-    setIncomeList([...incomeList, newIncome]);
+    const newIncome = { source, amount: parseFloat(amount) || 0, investment };
+    setIncomeList((prevList) => [...prevList, newIncome]);
 
     // Clear input fields after adding
     setSource("");
@@ -116,7 +114,7 @@ const MonthlyIncome = () => {
 
       <div className="total-income">
         Total Income for {month || "selected month"}: Rs
-        {incomeList.reduce((sum, item) => sum + item.amount, 0)}
+        {incomeList.length > 0 ? incomeList.reduce((sum, item) => sum + (item.amount || 0), 0) : 0}
       </div>
 
       <div className="form-group">
@@ -158,13 +156,19 @@ const MonthlyIncome = () => {
           </tr>
         </thead>
         <tbody>
-          {incomeList.map((income, index) => (
-            <tr key={index}>
-              <td>{income.source}</td>
-              <td>Rs{income.amount}</td>
-              <td>{income.investment}</td>
+          {incomeList.length > 0 ? (
+            incomeList.map((income, index) => (
+              <tr key={index}>
+                <td>{income.source || "N/A"}</td>
+                <td>Rs{income.amount || 0}</td>
+                <td>{income.investment || "N/A"}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="3" style={{ textAlign: "center" }}>No income added</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 
