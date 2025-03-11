@@ -11,7 +11,8 @@ function FinancialGoals() {
 
   const handleAddGoal = () => {
     if (goal && amount && progress >= 0 && progress <= 100) {
-      setGoalsList([...goalsList, { goal, amount, progress }]);
+      const newGoal = { goal, amount, progress };
+      setGoalsList([...goalsList, newGoal]);
       setGoal("");
       setAmount("");
       setProgress(0);
@@ -20,13 +21,30 @@ function FinancialGoals() {
     }
   };
 
+  const handleSave = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/goals", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(goalsList),
+      });
+
+      if (response.ok) {
+        alert("Goals saved successfully!");
+      } else {
+        throw new Error("Failed to save goals.");
+      }
+    } catch (error) {
+      console.error("Error saving goals:", error);
+      alert("Error: Could not save goals.");
+    }
+  };
+
   const handleBack = () => {
     navigate(-1);
   };
-
-  // eslint-disable-next-line no-useless-escape
-  const cleanText = (line) =>
-    line.replace(/^\d+\.\s*/, "").replace(/^-\s*/, "");
 
   return (
     <div className="container">
@@ -56,7 +74,7 @@ function FinancialGoals() {
           <button className="back-btn" onClick={handleBack}>
             Back
           </button>
-          <button className="save-btn" onClick={handleAddGoal}>
+          <button className="add-btn" onClick={handleAddGoal}>
             Add Goal
           </button>
         </div>
@@ -65,13 +83,19 @@ function FinancialGoals() {
       <div className="goal-list">
         {goalsList.map((item, index) => (
           <div key={index} className="goal-item">
-            <h3>{cleanText(item.goal)}</h3>
-            <p>Target: ${item.amount}</p>
+            <h3>{item.goal}</h3>
+            <p>Target: Rs{item.amount}</p>
             <p>Progress: {item.progress}%</p>
             <progress value={item.progress} max="100"></progress>
           </div>
         ))}
       </div>
+
+      {goalsList.length > 0 && (
+        <button className="save-btn" onClick={handleSave}>
+          Save Goals
+        </button>
+      )}
     </div>
   );
 }

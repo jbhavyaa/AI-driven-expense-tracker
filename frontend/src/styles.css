@@ -258,6 +258,7 @@ h2 {
 }
 
 /* Button */
+
 .input-group button {
   width: 100%;
   background: linear-gradient(135deg, #667eea, #764ba2);
@@ -454,6 +455,28 @@ button:hover {
 }
 
 /* Buttons */
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back-btn {
+  background-color: #ddd;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
 .back-btn,
 .save-btn {
   width: 100%;
