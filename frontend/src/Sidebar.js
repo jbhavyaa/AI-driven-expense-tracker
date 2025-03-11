@@ -14,7 +14,7 @@ const Sidebar = () => {
           <FaTachometerAlt className="menu-icon" /> Dashboard
         </li>
         <li onClick={() => navigate("/user-profile")}>
-          <FaUser className="menu-icon" /> User Profile
+          <FaUser className="menu-icon" /> User History
         </li>
         <li onClick={() => navigate("/budget-plan")}>
           <FaMoneyBillWave className="menu-icon" /> Budget Plan

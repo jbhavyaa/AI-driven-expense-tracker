@@ -115,7 +115,7 @@ const MonthlyIncome = () => {
       </select>
 
       <div className="total-income">
-        Total Income for {month || "selected month"}: $
+        Total Income for {month || "selected month"}: Rs
         {incomeList.reduce((sum, item) => sum + item.amount, 0)}
       </div>
 
@@ -161,7 +161,7 @@ const MonthlyIncome = () => {
           {incomeList.map((income, index) => (
             <tr key={index}>
               <td>{income.source}</td>
-              <td>${income.amount}</td>
+              <td>Rs{income.amount}</td>
               <td>{income.investment}</td>
             </tr>
           ))}

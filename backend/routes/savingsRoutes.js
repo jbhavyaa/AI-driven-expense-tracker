@@ -1,10 +1,9 @@
 const express = require("express");
-const { addOrUpdateSavings, getSavings } = require("../controllers/savingsController"); 
-const { protect } = require("../middleware/authMiddleware");
+const { saveSavings, getSavingsHistory } = require("../controllers/savingsController");
 
 const router = express.Router();
 
-router.post("/add", protect, addOrUpdateSavings); 
-router.get("/fetch", protect, getSavings);
+router.post("/", saveSavings);
+router.get("/", getSavingsHistory);
 
 module.exports = router;

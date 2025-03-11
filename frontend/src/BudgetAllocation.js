@@ -49,13 +49,13 @@ function BudgetAllocation() {
         </div>
       </div>
 
-      <h3>Total Budget: ${totalBudget.toFixed(2)}</h3>
+      <h3>Total Budget: Rs{totalBudget.toFixed(2) }</h3>
 
       <div className="budget-list">
         {budgetList.map((item, index) => (
           <div key={index} className="budget-item">
             <h4>{item.category}</h4>
-            <p>Amount: ${item.amount.toFixed(2)}</p>
+            <p>Amount: Rs{item.amount.toFixed(2)}</p>
           </div>
         ))}
       </div>

@@ -1,33 +1,23 @@
 const Savings = require("../models/Savings");
 
-// Add or Update Savings
-const addOrUpdateSavings = async (req, res) => {
-  const { currentSavings, savingsGoal } = req.body;
+// Save savings data
+exports.saveSavings = async (req, res) => {
   try {
-    let savings = await Savings.findOne({ userId: req.user.id });
-
-    if (savings) {
-      savings.currentSavings = currentSavings;
-      savings.savingsGoal = savingsGoal;
-    } else {
-      savings = new Savings({ userId: req.user.id, currentSavings, savingsGoal });
-    }
-
-    await savings.save();
-    res.json({ message: "Savings updated successfully", savings });
+    const { currentSavings, savingsGoal } = req.body;
+    const newSavings = new Savings({ currentSavings, savingsGoal });
+    await newSavings.save();
+    res.status(200).json({ message: "Savings data saved successfully!" });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ error: "Failed to save data." });
   }
 };
 
-// Fetch Savings Data
-const getSavings = async (req, res) => {
+// Get all savings history
+exports.getSavingsHistory = async (req, res) => {
   try {
-    const savings = await Savings.findOne({ userId: req.user.id });
-    res.json(savings || { currentSavings: 0, savingsGoal: 0 });
+    const savings = await Savings.find().sort({ date: -1 });
+    res.status(200).json(savings);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching savings" });
+    res.status(500).json({ error: "Failed to fetch data." });
   }
 };
-
-module.exports = { addOrUpdateSavings, getSavings }; 
