@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
-const SavingsSchema = new mongoose.Schema({
-  currentSavings: { type: Number, required: true },
-  savingsGoal: { type: Number, required: true },
-  date: { type: Date, default: Date.now },
+const savingsSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  currentSavings: { type: Number, default: 0 },
+  savingsGoal: { type: Number, default: 0 },
 });
 
-module.exports = mongoose.model("Savings", SavingsSchema);
+module.exports = mongoose.model("Savings", savingsSchema);

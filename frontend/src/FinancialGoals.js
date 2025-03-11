@@ -1,13 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./styles.css"; // Using the same CSS as MonthlyIncome
+import "./styles.css";
 
 function FinancialGoals() {
   const [goal, setGoal] = useState("");
   const [amount, setAmount] = useState("");
   const [progress, setProgress] = useState(0);
   const [goalsList, setGoalsList] = useState([]);
+  const [userEmail, setUserEmail] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if the user is logged in and fetch their email
+    const loggedInUser = JSON.parse(localStorage.getItem("user"));
+    if (loggedInUser && loggedInUser.email) {
+      setUserEmail(loggedInUser.email);
+      fetchGoals(loggedInUser.email);
+    } else {
+      navigate("/login"); // Redirect to login if user not found
+    }
+  }, [navigate]);
+
+  const fetchGoals = async (email) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/goals/${email}`);
+      const data = await response.json();
+      if (data.success) {
+        setGoalsList(data.goals);
+      }
+    } catch (error) {
+      console.error("Error fetching goals:", error);
+    }
+  };
 
   const handleAddGoal = () => {
     if (goal && amount && progress >= 0 && progress <= 100) {
@@ -22,13 +46,18 @@ function FinancialGoals() {
   };
 
   const handleSave = async () => {
+    if (!userEmail) {
+      alert("User email not found. Please log in.");
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:5000/api/goals", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(goalsList),
+        body: JSON.stringify({ email: userEmail, goals: goalsList }),
       });
 
       if (response.ok) {

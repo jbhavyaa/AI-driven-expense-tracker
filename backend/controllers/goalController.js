@@ -1,26 +1,43 @@
 const Goal = require("../models/Goal");
 
-// Save multiple financial goals
-exports.saveGoals = async (req, res) => {
+// Fetch goals based on user email
+const getGoals = async (req, res) => {
   try {
-    const goals = req.body;
-    if (!Array.isArray(goals) || goals.length === 0) {
-      return res.status(400).json({ error: "Invalid data format." });
+    const { email } = req.params;
+    const userGoals = await Goal.findOne({ email });
+
+    if (userGoals) {
+      res.json({ success: true, goals: userGoals.goals });
+    } else {
+      res.json({ success: true, goals: [] });
+    }
+  } catch (error) {
+    console.error("Error fetching goals:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Save or update goals for a user
+const saveGoals = async (req, res) => {
+  try {
+    const { email, goals } = req.body;
+
+    let userGoals = await Goal.findOne({ email });
+
+    if (userGoals) {
+      // Update existing goals
+      userGoals.goals = goals;
+    } else {
+      // Create new goals document
+      userGoals = new Goal({ email, goals });
     }
 
-    await Goal.insertMany(goals);
-    res.status(200).json({ message: "Financial goals saved successfully!" });
+    await userGoals.save();
+    res.json({ success: true, message: "Goals saved successfully!" });
   } catch (error) {
-    res.status(500).json({ error: "Failed to save financial goals." });
+    console.error("Error saving goals:", error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
-// Get all saved financial goals
-exports.getGoals = async (req, res) => {
-  try {
-    const goals = await Goal.find().sort({ date: -1 });
-    res.status(200).json(goals);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch financial goals." });
-  }
-};
+module.exports = { getGoals, saveGoals };

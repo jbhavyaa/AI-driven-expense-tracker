@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
 
-const GoalSchema = new mongoose.Schema({
-  goal: { type: String, required: true },
-  amount: { type: Number, required: true },
-  progress: { type: Number, required: true, min: 0, max: 100 },
-  date: { type: Date, default: Date.now },
+const goalSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  goals: [
+    {
+      goal: String,
+      amount: Number,
+      progress: Number,
+    },
+  ],
 });
 
-module.exports = mongoose.model("Goal", GoalSchema);
+module.exports = mongoose.model("Goal", goalSchema);

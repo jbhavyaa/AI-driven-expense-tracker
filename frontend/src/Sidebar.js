@@ -16,9 +16,9 @@ const Sidebar = () => {
         <li onClick={() => navigate("/user-profile")}>
           <FaUser className="menu-icon" /> User History
         </li>
-        <li onClick={() => navigate("/budget-plan")}>
+        {/* <li onClick={() => navigate("/budget-plan")}>
           <FaMoneyBillWave className="menu-icon" /> Budget Plan
-        </li>
+        </li> */}
         <li onClick={() => navigate("/financial-advice")}>
           <FaCommentDollar className="menu-icon" /> Financial Advice
         </li>

@@ -1,9 +1,11 @@
 const express = require("express");
-const { saveGoals, getGoals } = require("../controllers/goalController");
-
 const router = express.Router();
+const { getGoals, saveGoals } = require("../controllers/goalController");
 
+// Route to fetch goals by user email
+router.get("/:email", getGoals);
+
+// Route to save or update goals
 router.post("/", saveGoals);
-router.get("/", getGoals);
 
 module.exports = router;

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
+import { useNavigate } from "react-router-dom";
 
 const MonthlyIncome = () => {
+  const navigate = useNavigate();
   const [month, setMonth] = useState("");
   const [source, setSource] = useState("");
   const [amount, setAmount] = useState("");
@@ -173,7 +175,9 @@ const MonthlyIncome = () => {
       </table>
 
       <div className="buttons">
-        <button className="back-btn">Back</button>
+      <button className="back-btn" onClick={() => navigate("/dashboard")}>
+            Back
+          </button>
         <button className="save-btn" onClick={handleSaveIncome} disabled={loading}>
           {loading ? "Saving..." : "Save"}
         </button>

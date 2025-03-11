@@ -10,7 +10,7 @@ const ProfessionalDashboard = () => {
     <div className="dashboard-container">
       <Sidebar /> {/* Add Sidebar Component */}
       <div className="dashboard-content">
-        <h2>Professional Dashboard</h2>
+        <h1>SheBudget</h1>
 
         <div className="dashboard-grid">
           <div className="dashboard-box" onClick={() => navigate("/monthly-income")}>
